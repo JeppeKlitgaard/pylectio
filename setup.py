@@ -3,7 +3,11 @@
 from distutils.core import setup
 from lectio import __version__ as version
 
+<<<<<<< HEAD
 setup(name="lectio",
+=======
+setup(name="Lectio",
+>>>>>>> 85672063c1c4a7bedaccd6eb21430dd0dad94a2d
       version=".".join([str(x) for x in version]),
       description="Quick'n'dirty Lectio timetable scraper.",
       author="Jeppe Klitgaard",
