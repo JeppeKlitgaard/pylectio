@@ -215,6 +215,9 @@ class Period(object):
                    ))
 
 def get_periods(school_id, student_id, week, year):
+    week = str(week)
+    year = str(year)
+
     url = craft_url(school_id, student_id, week, year)
     page = requests.get(url)
     soup = bs(page.text)
