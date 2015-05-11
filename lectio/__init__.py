@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__version__ = (0, 0, 1)
+__version__ = (0, 0, 2)
 
 # This is by no means beautiful code - scrapers rarely are.
 
@@ -15,16 +15,22 @@ from enum import Enum
 
 import datetime
 
-LECTIO_URL = u"https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}"
+LECTIO_URL = (u"https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx"
+              u"?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}")
 
 
 def _craft_week_id(week, year):
-    """Returns a WeekID."""
+    """
+    Returns a WeekID.
+    """
     return str(week).zfill(2) + str(year)
 
 
 def craft_url(school_id, student_id, week, year):
-    """Returns a Lectio URL for a given student at a given school for the proper week."""
+    """
+    Returns a Lectio URL for a given student at a given school for the proper
+    week.
+    """
     week_id = _craft_week_id(week, year)
 
     return LECTIO_URL.format(SCHOOL_ID=school_id, STUDENT_ID=student_id,
@@ -38,7 +44,9 @@ class PeriodStatuses(Enum):
 
 
 class Period(object):
-    """Represents a Period in a student's Lectio timetable."""
+    """
+    Represents a Period in a student's Lectio timetable.
+    """
     CHANGED = "Ændret!"
     CANCELLED = "Aflyst!"
 
@@ -129,7 +137,8 @@ class Period(object):
 
         # teachers line, almost always present
         if (self.lines[0].startswith("Lærer: ")
-            or self.lines[0].startswith("Lærere: ")):
+                or self.lines[0].startswith("Lærere: ")):
+
             teachers_line = self.lines.pop(0)
             # remove lead
             teachers_line = teachers_line.split(" ", 1)[-1]
@@ -141,7 +150,8 @@ class Period(object):
 
         # room line, always present if teacher present
         if (self.lines[0].startswith("Lokale: ")
-            or self.lines[0].startswith("Lokaler: ")):
+                or self.lines[0].startswith("Lokaler: ")):
+
             room_line = self.lines.pop(0)
             # remove lead
             room_line = room_line.split(" ", 1)[-1]
@@ -153,7 +163,8 @@ class Period(object):
 
         # Resource line
         if (self.lines[0].startswith("Resource: ")
-            or self.lines[0].startswith("Ressourcer: ")):
+                or self.lines[0].startswith("Ressourcer: ")):
+
             resource_line = self.lines.pop(0)
             # remove lead
             resource_line = resource_line.split(" ", 1)[-1]
@@ -165,7 +176,8 @@ class Period(object):
 
         # Links line
         if (self.lines[0].startswith("Link: ")
-            or self.lines[0].startswith("Links: ")):
+                or self.lines[0].startswith("Links: ")):
+
             link_line = self.lines.pop(0)
             # remove lead
             link_line = link_line.split(" ", 1)[-1]
@@ -180,7 +192,7 @@ class Period(object):
 
         # Homework lines
         if self.lines[0].startswith("Lektier:"):
-            self.lines.pop(0) # Delete this line
+            self.lines.pop(0)  # Delete this line
             homework_lines = []
             while not self.lines[0].startswith("Note:"):
                 homework_lines.append(self.lines.pop(0))
@@ -195,7 +207,7 @@ class Period(object):
 
         # Note lines
         if self.lines[0].startswith("Note:"):
-            self.lines.pop(0) # Delete this line
+            self.lines.pop(0)  # Delete this line
             note_lines = []
             while True:
                 note_lines.append(self.lines.pop(0))
@@ -206,16 +218,13 @@ class Period(object):
 
         return
 
-
-
     @staticmethod
     def is_period(tag):
         """Used by BeautifulSoup to determine whether a tag is a period."""
-        return all((
-                    tag.name == "a",
+        return all((tag.name == "a",
                     "s2skemabrik" in tag.get("class", []),
-                    "s2bgbox" in tag.get("class", [])
-                   ))
+                    "s2bgbox" in tag.get("class", [])))
+
 
 def get_periods(school_id, student_id, week, year):
     week = str(week)
