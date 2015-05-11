@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Module for interacting with lectio.dk.
+
+Currently supplies the Period class, which represents a period of a lectio
+timetable.
+"""
+
 __version__ = (0, 0, 2)
 
 # This is by no means beautiful code - scrapers rarely are.
@@ -38,6 +45,9 @@ def craft_url(school_id, student_id, week, year):
 
 
 class PeriodStatuses(Enum):
+    """
+    Enumerates the statuses that a ``Period`` can have.
+    """
     NOTHING = 0
     CANCELLED = 1
     CHANGED = 2
@@ -227,6 +237,9 @@ class Period(object):
 
 
 def get_periods(school_id, student_id, week, year):
+    """
+    Returns a list of ``Period``s for a given week and year.
+    """
     week = str(week)
     year = str(year)
 
