@@ -6,3 +6,6 @@ week = 6
 year = 2015
 
 periods = get_periods(school_id, student_id, week, year)
+
+for period in periods:
+    print(period)
