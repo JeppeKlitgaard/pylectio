@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 __version__ = (0, 0, 1)
 
 # This is by no means beautiful code - scrapers rarely are.
@@ -12,7 +15,7 @@ from enum import Enum
 
 import datetime
 
-LECTIO_URL = "https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}"
+LECTIO_URL = u"https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}"
 
 
 def _craft_week_id(week, year):
