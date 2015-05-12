@@ -8,7 +8,7 @@ Currently supplies the Period class, which represents a period of a lectio
 timetable.
 """
 
-__version__ = (0, 0, 2)
+__version__ = (0, 0, 3)
 
 # This is by no means beautiful code - scrapers rarely are.
 
