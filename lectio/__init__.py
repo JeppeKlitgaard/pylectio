@@ -235,6 +235,21 @@ class Period(object):
                     "s2skemabrik" in tag.get("class", []),
                     "s2bgbox" in tag.get("class", [])))
 
+    def __repr__(self):
+        indent = "\t"
+
+        attributes = ["status", "starttime", "endtime", "topic", "groups",
+                      "teachers", "rooms", "resources", "links", "homework",
+                      "note"]
+
+        x = "<Period>"
+
+        for attribute in attributes:
+            attr_line = "{}: {}".format(attribute, getattr(self, attribute))
+            x += "\n{}{}".format(indent, attr_line)
+
+        return x
+
 
 def get_periods(school_id, student_id, week, year):
     """
