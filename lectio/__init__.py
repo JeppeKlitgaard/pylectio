@@ -21,9 +21,11 @@ import re
 from enum import Enum
 
 import datetime
+import pytz
 
 LECTIO_URL = (u"https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx"
               u"?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}")
+DEFAULT_TZ = pytz.timezone("Europe/Copenhagen")
 
 
 def _craft_week_id(week, year):
@@ -60,7 +62,7 @@ class Period(object):
     CHANGED = "Ændret!"
     CANCELLED = "Aflyst!"
 
-    def __init__(self, raw_tag):
+    def __init__(self, raw_tag, tz=DEFAULT_TZ):
         self.status = None
         self.starttime = None
         self.endtime = None
@@ -72,6 +74,8 @@ class Period(object):
         self.links = None
         self.homework = None
         self.note = None
+
+        self.tz = tz
 
         self.data = raw_tag["title"]
 
@@ -131,6 +135,10 @@ class Period(object):
                                            starthour, startminute)
         self.endtime = datetime.datetime(endyear, endmonth, endday, endhour,
                                          endminute)
+
+        # convert to UTC
+        self.starttime = self.tz.localize(self.starttime).astimezone(pytz.utc)
+        self.endtime = self.tz.localize(self.endtime).astimezone(pytz.utc)
 
         # topic line, rarely present
         if not self.lines[0].startswith("Hold: "):
@@ -251,9 +259,11 @@ class Period(object):
         return x
 
 
-def get_periods(school_id, student_id, week, year):
+def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
     """
     Returns a list of ``Period``s for a given week and year.
+
+    ``tz`` must be set if the localtime of lectio is not Europe/Copenhagen.
     """
     week = str(week)
     year = str(year)
