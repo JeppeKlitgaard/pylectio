@@ -4,6 +4,8 @@ Contains utility functions and classes used by pylectio.
 
 from .config import LECTIO_URL
 
+from re import _pattern_type
+
 
 def _craft_week_id(week, year):
     """
@@ -37,3 +39,32 @@ def deduplicate_list_of_periods(periods):
             result.append(period)
 
     return result
+
+
+def lookup_values(values, lookup_table):
+    """
+    Looks up a list of ``values``, replacing each ``value`` with the
+    respective ``value`` in ``lookup_table``.
+
+    The keys of ``lookup_table`` can be ``re.RegexObject`` or ``str``.
+    """
+    new_values = []
+
+    for value in values:
+        found = False
+        for k, v in lookup_table.items():
+            if isinstance(k, _pattern_type):
+                if k.match(value):
+                    new_values.append(v)
+                    found = True
+                    break
+            else:
+                if value == k:
+                    new_values.append(v)
+                    found = True
+                    break
+
+        if not found:
+            new_values.append(value)
+
+    return new_values
