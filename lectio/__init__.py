@@ -24,27 +24,8 @@ from enum import Enum
 import datetime
 import pytz
 
-LECTIO_URL = (u"https://www.lectio.dk/lectio/{SCHOOL_ID}/SkemaNy.aspx"
-              u"?type=elev&elevid={STUDENT_ID}&week={WEEK_ID}")
-DEFAULT_TZ = pytz.timezone("Europe/Copenhagen")
-
-
-def _craft_week_id(week, year):
-    """
-    Returns a WeekID.
-    """
-    return str(week).zfill(2) + str(year)
-
-
-def craft_url(school_id, student_id, week, year):
-    """
-    Returns a Lectio URL for a given student at a given school for the proper
-    week.
-    """
-    week_id = _craft_week_id(week, year)
-
-    return LECTIO_URL.format(SCHOOL_ID=school_id, STUDENT_ID=student_id,
-                             WEEK_ID=week_id)
+from .config import DEFAULT_TZ
+from .utilities import craft_url, deduplicate_list_of_periods
 
 
 class PeriodStatuses(Enum):
@@ -280,18 +261,6 @@ class Period(object):
         return x
 
 
-def deduplicate_list_of_periods(periods):
-    known_ids = []
-    result = []
-
-    for period in periods:
-        if period.id not in known_ids:
-            known_ids.append(period.id)
-            result.append(period)
-
-    return result
-
-
 def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
     """
     Returns a list of ``Period``s for a given week and year.
@@ -307,7 +276,7 @@ def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
 
     raw_periods = soup.find_all(Period.is_period)
 
-    periods = [Period(raw) for raw in raw_periods]
+    periods = [Period(raw, tz=tz) for raw in raw_periods]
 
     periods = deduplicate_list_of_periods(periods)
 
