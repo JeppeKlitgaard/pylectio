@@ -70,6 +70,7 @@ class Period(object):
         self.topic = None
         self.groups = None
         self.teachers = None
+        self.teachers_short = None
         self.rooms = None
         self.resources = None
         self.links = None
@@ -170,6 +171,18 @@ class Period(object):
             teachers_line = teachers_line.split(" ", 1)[-1]
             self.teachers = [x.lstrip().rstrip() for x in teachers_line.split(",")]
 
+        # teachers short
+        TEACHER_INITIAL_PATTERN = re.compile(r"\((\w+)\)")
+        if self.teachers is not None:
+            self.teachers_short = []
+
+            for teacher in self.teachers:
+                match = TEACHER_INITIAL_PATTERN.search(teacher)
+                if match is not None:
+                    self.teachers_short.append(match.group(1))
+                else:
+                    self.teachers_short.append(teacher)
+
         # We need to return if we have no more data to process
         if not self.lines:
             return
@@ -255,8 +268,8 @@ class Period(object):
         indent = "\t"
 
         attributes = ["status", "starttime", "endtime", "topic", "groups",
-                      "teachers", "rooms", "resources", "links", "homework",
-                      "note", "id"]
+                      "teachers", "teachers_short", "rooms", "resources",
+                      "links", "homework", "note", "id"]
 
         x = "<Period>"
 
