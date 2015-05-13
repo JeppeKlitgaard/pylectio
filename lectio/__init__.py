@@ -15,6 +15,7 @@ __version__ = (0, 0, 4)
 import requests
 from bs4 import BeautifulSoup as bs
 
+from urllib.parse import urlparse, parse_qs
 import html.parser
 import re
 
@@ -74,10 +75,17 @@ class Period(object):
         self.links = None
         self.homework = None
         self.note = None
+        self.id = None
 
         self.tz = tz
 
         self.data = raw_tag["title"]
+
+        # Id
+        parsed_url = urlparse(raw_tag["href"])
+        parsed_qs = parse_qs(parsed_url.query)
+
+        self.id = parsed_qs["id"][0]
 
         # Remove empty elements, remove left and right whitespacing
         self.lines = [x.lstrip().rstrip() for x in self.data.split("\n") if x]
@@ -105,31 +113,31 @@ class Period(object):
         p += r'(?P<endday>\d*)(?:\/*)(?P<endmonth>\d*)(?:-*)(?P<endyear>\d*)(?: *)(?P<endhour>\d{2}):(?P<endminute>\d{2})$'
         DATE_LINE_PATTERN = re.compile(p)
         date_line = self.lines.pop(0)
-        self.result = re.match(DATE_LINE_PATTERN, date_line)
+        result = re.match(DATE_LINE_PATTERN, date_line)
 
-        startday = int(self.result.group("startday"))
-        startmonth = int(self.result.group("startmonth"))
-        startyear = int(self.result.group("startyear"))
-        starthour = int(self.result.group("starthour"))
-        startminute = int(self.result.group("startminute"))
+        startday = int(result.group("startday"))
+        startmonth = int(result.group("startmonth"))
+        startyear = int(result.group("startyear"))
+        starthour = int(result.group("starthour"))
+        startminute = int(result.group("startminute"))
 
-        endday = self.result.group("endday")
+        endday = result.group("endday")
         if not endday:
-            endday = self.result.group("startday")
+            endday = result.group("startday")
         endday = int(endday)
 
-        endmonth = self.result.group("endmonth")
+        endmonth = result.group("endmonth")
         if not endmonth:
-            endmonth = self.result.group("startmonth")
+            endmonth = result.group("startmonth")
         endmonth = int(endmonth)
 
-        endyear = self.result.group("endyear")
+        endyear = result.group("endyear")
         if not endyear:
-            endyear = self.result.group("startyear")
+            endyear = result.group("startyear")
         endyear = int(endyear)
 
-        endhour = int(self.result.group("endhour"))
-        endminute = int(self.result.group("endminute"))
+        endhour = int(result.group("endhour"))
+        endminute = int(result.group("endminute"))
 
         self.starttime = datetime.datetime(startyear, startmonth, startday,
                                            starthour, startminute)
@@ -248,7 +256,7 @@ class Period(object):
 
         attributes = ["status", "starttime", "endtime", "topic", "groups",
                       "teachers", "rooms", "resources", "links", "homework",
-                      "note"]
+                      "note", "id"]
 
         x = "<Period>"
 
@@ -257,6 +265,18 @@ class Period(object):
             x += "\n{}{}".format(indent, attr_line)
 
         return x
+
+
+def deduplicate_list_of_periods(periods):
+    known_ids = []
+    result = []
+
+    for period in periods:
+        if period.id not in known_ids:
+            known_ids.append(period.id)
+            result.append(period)
+
+    return result
 
 
 def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
@@ -275,5 +295,7 @@ def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
     raw_periods = soup.find_all(Period.is_period)
 
     periods = [Period(raw) for raw in raw_periods]
+
+    periods = deduplicate_list_of_periods(periods)
 
     return periods
