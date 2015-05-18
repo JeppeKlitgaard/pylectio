@@ -67,7 +67,10 @@ class Period(object):
         parsed_url = urlparse(raw_tag["href"])
         parsed_qs = parse_qs(parsed_url.query)
 
-        self.id = parsed_qs["id"][0]
+        if "id" in parsed_qs:
+            self.id = parsed_qs["id"][0]
+        elif "ProeveholdId" in parsed_qs:
+            self.id = "p" + parsed_qs["ProeveholdId"][0]
 
         # Remove empty elements, remove left and right whitespacing
         self.lines = [x.lstrip().rstrip() for x in self.data.split("\n") if x]
@@ -271,6 +274,7 @@ def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
     year = str(year)
 
     url = craft_url(school_id, student_id, week, year)
+    print(url)
     page = requests.get(url)
     soup = bs(page.text)
 
