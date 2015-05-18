@@ -71,6 +71,8 @@ class Period(object):
             self.id = parsed_qs["id"][0]
         elif "ProeveholdId" in parsed_qs:
             self.id = "p" + parsed_qs["ProeveholdId"][0]
+        else:
+            raise KeyError("Could not find an id in parsed query string.")
 
         # Remove empty elements, remove left and right whitespacing
         self.lines = [x.lstrip().rstrip() for x in self.data.split("\n") if x]
