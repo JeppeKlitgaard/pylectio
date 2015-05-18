@@ -276,7 +276,7 @@ def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
     year = str(year)
 
     url = craft_url(school_id, student_id, week, year)
-    print(url)
+
     page = requests.get(url)
     soup = bs(page.text)
 
