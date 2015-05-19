@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 from .config import BASE_URL
 
 
-def _make_url(school_id, endpoint, query):
+def _make_url(school_id, endpoint, query={}):
     """
     Crafts an URL based on the ``school_id``, ``endpoint``, and ``query``.
 
@@ -24,8 +24,11 @@ def _make_url(school_id, endpoint, query):
     Example:
     ``query = {"type": "elev"}``
     """
-    qs = urlencode(query)
-    url = BASE_URL + school_id + "/" + endpoint + "?" + qs
+    url = BASE_URL + school_id + "/" + endpoint
+
+    if query:
+        qs = urlencode(query)
+        url += "?" + qs
 
     return url
 
