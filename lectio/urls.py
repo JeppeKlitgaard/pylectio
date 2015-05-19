@@ -47,3 +47,17 @@ def make_timetable_url(school_id, student_id, week, year):
     }
 
     return _make_url(school_id, "SkemaNy.aspx", query)
+
+
+def make_login_url(school_id):
+    """
+    Returns a Lectio Login URL.
+    """
+    return _make_url(school_id, "login.aspx")
+
+
+def make_frontpage_url(school_id):
+    """
+    Returns a Lectio Frontpage URL.
+    """
+    return _make_url(school_id, "forside.aspx")
