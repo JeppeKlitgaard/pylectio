@@ -9,8 +9,6 @@ from urllib.parse import urlparse, parse_qs
 import html.parser
 import re
 
-from enum import Enum
-
 import datetime
 import pytz
 
@@ -237,19 +235,6 @@ class Period(LectioType):
         return all((tag.name == "a",
                     "s2skemabrik" in tag.get("class", []),
                     "s2bgbox" in tag.get("class", [])))
-
-    def __repr__(self):
-        indent = "\t"
-
-
-
-        x = "<Period>"
-
-        for attribute in attributes:
-            attr_line = "{}: {}".format(attribute, getattr(self, attribute))
-            x += "\n{}{}".format(indent, attr_line)
-
-        return x
 
 
 def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):

@@ -42,6 +42,11 @@ class Session(object):
             raise SessionClosedError("Session has already been closed.")
 
     def assert_any(self):
+        """
+        See ``assert_open`` and ``assert_authenticated``.
+
+        This fires both of them.
+        """
         self.assert_authenticated()
         self.assert_open()
 
@@ -94,8 +99,11 @@ class Session(object):
         self.open = False
 
     def get_assignments(self):
+        """
+        Returns a list of ``Assignment``s.
+        """
         url = make_assignments_overview_url(self.school_id)
-        
+
         payload = {
             "elevid": self.student_id
         }
@@ -112,8 +120,8 @@ class Session(object):
 
         def _is_valid_assignment_row(tag):
             """
-            Used by BeautifulSoup to determine whether a tag is a valid assignment
-            row or not.
+            Used by BeautifulSoup to determine whether a tag is a valid
+            assignment row or not.
             """
             validators = []
 

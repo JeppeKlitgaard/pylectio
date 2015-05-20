@@ -1,3 +1,7 @@
+"""
+Contains the base types used by pylectio.
+"""
+
 from enum import Enum
 
 
@@ -29,10 +33,16 @@ class PeriodStatuses(Enum):
 
 
 class AssignmentWaitingFor(Enum):
+    """
+    Enumerates the people that an ``Assignment`` can be waiting for.
+    """
     STUDENT = 0
     TEACHER = 1
 
 
 class AssignmentStatuses(Enum):
+    """
+    Enumerates the statuses that an ``Assignment`` can have.
+    """
     HANDED_IN = 0
     WAITING = 1

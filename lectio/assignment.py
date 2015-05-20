@@ -70,7 +70,10 @@ class Assignment(LectioType):
         deadline_tag = raw_tag.contents.pop(0)
         self.deadline = dt_parser.parse(deadline_tag.span.text, dayfirst=True,
                                         yearfirst=False)
+        # pylint thinks deadline is a tuple.
+        # pylint: disable=no-member
         self.deadline = self.deadline.replace(tzinfo=self.tz)
+        # pylint: enable=no-member
 
         # Student Hours
         student_hours_tag = raw_tag.contents.pop(0)
