@@ -5,4 +5,4 @@
 Module for interacting with lectio.dk.
 """
 
-__version__ = (0, 1, 2)
+__version__ = (0, 1, 3)
