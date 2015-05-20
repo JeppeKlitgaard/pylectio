@@ -2,17 +2,18 @@
 Contains the Session object, used when dealing with Lectio endpoints
 that require authentication.
 """
-
 import requests
 from bs4 import BeautifulSoup as BS
 from urllib.parse import urlparse, parse_qs
 
 from .exceptions import (NotLoggedInError, SessionClosedError,
                          AuthenticationError)
-from .config import VIEW_STATEX, EVENTVALIDATION
+from .config import VIEW_STATEX, EVENTVALIDATION, DEFAULT_TZ
 from .urls import (make_login_url, make_frontpage_url,
-                   make_assignments_overview_url)
+                   make_assignments_overview_url, make_timetable_url)
 from .assignment import Assignment
+from .timetable import Period
+from .utilities import deduplicate_list_of_periods
 
 
 class Session(object):
@@ -98,7 +99,7 @@ class Session(object):
         self.session.close()
         self.open = False
 
-    def get_assignments(self):
+    def get_assignments(self, tz=DEFAULT_TZ):
         """
         Returns a list of ``Assignment``s.
         """
@@ -134,6 +135,41 @@ class Session(object):
 
         assignment_rows = table.find_all(_is_valid_assignment_row)
 
-        assignments = [Assignment(row) for row in assignment_rows]
+        assignments = [Assignment(row, tz=tz) for row in assignment_rows]
 
         return assignments
+
+    def get_periods(self, week, year, student_id=None, tz=DEFAULT_TZ):
+        """
+        Returns a list of ``Period``s for a given week and year.
+
+        ``student_id`` must be set if ``Session`` is not authenticated.
+        ``tz`` must be set if the localtime of lectio is not Europe/Copenhagen.
+        """
+        if student_id is None:
+            if self.student_id is None:
+                raise TypeError("'student_id' must be set.")
+            student_id = self.student_id
+
+        url = make_timetable_url(self.school_id)
+
+        week_id = str(week).zfill(2) + str(year)
+
+        payload = {
+            "type": "elev",
+            "elevid": student_id,
+            "week": week_id
+        }
+
+        req = self.session.get(url, params=payload)
+        soup = BS(req.content)
+
+        raw_periods = soup.find_all(Period.is_period)
+
+        periods = [Period(raw, tz=tz) for raw in raw_periods]
+
+        periods = deduplicate_list_of_periods(periods)
+
+        return periods
+
+

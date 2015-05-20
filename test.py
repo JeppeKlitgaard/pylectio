@@ -1,11 +1,13 @@
-from lectio import get_periods
+from lectio.session import Session
 
 school_id = "248"
 student_id = "9232029391"
 week = 6
 year = 2015
 
-periods = get_periods(school_id, student_id, week, year)
+s = Session(school_id)
+
+periods = s.get_periods(week, year, student_id=student_id)
 
 for period in periods:
     print(period)

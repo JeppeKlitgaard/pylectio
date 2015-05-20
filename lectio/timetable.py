@@ -1,10 +1,6 @@
 """
 Contains functions and classes related to the lectio timetable.
 """
-
-import requests
-from bs4 import BeautifulSoup as bs
-
 from urllib.parse import urlparse, parse_qs
 import html.parser
 import re
@@ -13,8 +9,6 @@ import datetime
 import pytz
 
 from .config import DEFAULT_TZ
-from .utilities import deduplicate_list_of_periods
-from .urls import make_timetable_url
 from .types import PeriodStatuses, LectioType
 
 
@@ -235,26 +229,3 @@ class Period(LectioType):
         return all((tag.name == "a",
                     "s2skemabrik" in tag.get("class", []),
                     "s2bgbox" in tag.get("class", [])))
-
-
-def get_periods(school_id, student_id, week, year, tz=DEFAULT_TZ):
-    """
-    Returns a list of ``Period``s for a given week and year.
-
-    ``tz`` must be set if the localtime of lectio is not Europe/Copenhagen.
-    """
-    week = str(week)
-    year = str(year)
-
-    url = make_timetable_url(school_id, student_id, week, year)
-
-    page = requests.get(url)
-    soup = bs(page.text)
-
-    raw_periods = soup.find_all(Period.is_period)
-
-    periods = [Period(raw, tz=tz) for raw in raw_periods]
-
-    periods = deduplicate_list_of_periods(periods)
-
-    return periods
