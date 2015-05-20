@@ -102,6 +102,8 @@ class Session(object):
         """
         Returns a list of ``Assignment``s.
         """
+        self.assert_any()
+
         url = make_assignments_overview_url(self.school_id)
 
         payload = {
