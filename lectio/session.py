@@ -171,5 +171,3 @@ class Session(object):
         periods = deduplicate_list_of_periods(periods)
 
         return periods
-
-
