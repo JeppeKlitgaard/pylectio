@@ -10,7 +10,9 @@ from urllib.parse import urlparse, parse_qs
 from .exceptions import (NotLoggedInError, SessionClosedError,
                          AuthenticationError)
 from .config import VIEW_STATEX, EVENTVALIDATION
-from .urls import make_login_url, make_frontpage_url
+from .urls import (make_login_url, make_frontpage_url,
+                   make_assignments_overview_url)
+from .assignment import Assignment
 
 
 class Session(object):
@@ -92,4 +94,36 @@ class Session(object):
         self.open = False
 
     def get_assignments(self):
-        pass
+        url = make_assignments_overview_url(self.school_id)
+        
+        payload = {
+            "elevid": self.student_id
+        }
+
+        req = self.session.get(url, params=payload)
+        soup = BS(req.content)
+
+        table_attrs = {
+            "id": "s_m_Content_Content_ExerciseGV",
+            "class": "ls-table-layout1 maxW textTop"
+        }
+
+        table = soup.find("table", attrs=table_attrs)
+
+        def _is_valid_assignment_row(tag):
+            """
+            Used by BeautifulSoup to determine whether a tag is a valid assignment
+            row or not.
+            """
+            validators = []
+
+            validators.append(tag.name == "tr")
+            validators.append(tag.get("class") in (None, ["separationCell"]))
+
+            return all(validators)
+
+        assignment_rows = table.find_all(_is_valid_assignment_row)
+
+        assignments = [Assignment(row) for row in assignment_rows]
+
+        return assignments

@@ -27,3 +27,9 @@ class AuthenticationError(LectioError):
     """
     An exception raised when the authentication failed.
     """
+
+
+class ScrapingError(LectioError):
+    """
+    An exception raised when scraping failed.
+    """

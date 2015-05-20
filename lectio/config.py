@@ -23,3 +23,5 @@ EVENTVALIDATION = ("NqCgrFleahJiNLJy+ZoeITtYXPBOrIlZbkBmxzdK2iM8ZsXaYo9U+ZYX2Z"
                    "VVbKmi0jEfBWEwWeqTAfD5MDntWpqlABfnXcDGJXHMzvfZ8L6iyZTQ36Oy"
                    "BBQ+Eb5qdyN1frKh4zgcfjJmVXj2xoXIsPg21xINNmKJ/TkO6VWvxlPxqJ"
                    "KRFSgkK9jpSPCjDAB1zmiv3Qf3z1HKHUqhPnF1zi0W")
+
+DECIMAL_SEPARATOR = ","

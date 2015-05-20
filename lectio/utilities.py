@@ -48,3 +48,13 @@ def lookup_values(values, lookup_table):
             new_values.append(value)
 
     return new_values
+
+
+def percent2float(percent):
+    """
+    Converts a string with a percentage to a float.
+    """
+    percent = percent.replace(" ", "")
+    percent = percent.strip("%")
+
+    return float(percent) / 100

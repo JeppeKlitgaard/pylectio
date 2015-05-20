@@ -17,23 +17,18 @@ import pytz
 from .config import DEFAULT_TZ
 from .utilities import deduplicate_list_of_periods
 from .urls import make_timetable_url
+from .types import PeriodStatuses, LectioType
 
 
-class PeriodStatuses(Enum):
-    """
-    Enumerates the statuses that a ``Period`` can have.
-    """
-    NOTHING = 0
-    CANCELLED = 1
-    CHANGED = 2
-
-
-class Period(object):
+class Period(LectioType):
     """
     Represents a Period in a student's Lectio timetable.
     """
     CHANGED = "Ændret!"
     CANCELLED = "Aflyst!"
+    ATTRIBUTES = ["status", "starttime", "endtime", "topic", "groups",
+                  "teachers", "teachers_short", "rooms", "resources",
+                  "links", "homework", "note", "id"]
 
     def __init__(self, raw_tag, tz=DEFAULT_TZ):
         self.status = None
@@ -236,7 +231,9 @@ class Period(object):
 
     @staticmethod
     def is_period(tag):
-        """Used by BeautifulSoup to determine whether a tag is a period."""
+        """
+        Used by BeautifulSoup to determine whether a tag is a period.
+        """
         return all((tag.name == "a",
                     "s2skemabrik" in tag.get("class", []),
                     "s2bgbox" in tag.get("class", [])))
@@ -244,9 +241,7 @@ class Period(object):
     def __repr__(self):
         indent = "\t"
 
-        attributes = ["status", "starttime", "endtime", "topic", "groups",
-                      "teachers", "teachers_short", "rooms", "resources",
-                      "links", "homework", "note", "id"]
+
 
         x = "<Period>"
 

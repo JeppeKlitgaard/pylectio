@@ -61,3 +61,10 @@ def make_frontpage_url(school_id):
     Returns a Lectio Frontpage URL.
     """
     return _make_url(school_id, "forside.aspx")
+
+
+def make_assignments_overview_url(school_id):
+    """
+    Returns a Lectio Assignment Overview URL.
+    """
+    return _make_url(school_id, "OpgaverElev.aspx")
