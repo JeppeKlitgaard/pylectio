@@ -20,9 +20,10 @@ class Session(object):
     """
     A session object used for authenticating requests to lectio.
     """
-    def __init__(self, school_id):
+    def __init__(self, school_id, tz=DEFAULT_TZ):
         self.school_id = school_id
         self.student_id = None
+        self.timezone = tz
 
         self.session = requests.Session()
         self.authenticated = False
@@ -99,7 +100,7 @@ class Session(object):
         self.session.close()
         self.open = False
 
-    def get_assignments(self, tz=DEFAULT_TZ):
+    def get_assignments(self):
         """
         Returns a list of ``Assignment``s.
         """
@@ -135,11 +136,12 @@ class Session(object):
 
         assignment_rows = table.find_all(_is_valid_assignment_row)
 
-        assignments = [Assignment(row, tz=tz) for row in assignment_rows]
+        assignments = [Assignment(row, tz=self.timezone) for row in
+                       assignment_rows]
 
         return assignments
 
-    def get_periods(self, week, year, student_id=None, tz=DEFAULT_TZ):
+    def get_periods(self, week, year, student_id=None):
         """
         Returns a list of ``Period``s for a given week and year.
 
@@ -166,7 +168,7 @@ class Session(object):
 
         raw_periods = soup.find_all(Period.is_period)
 
-        periods = [Period(raw, tz=tz) for raw in raw_periods]
+        periods = [Period(raw, tz=self.timezone) for raw in raw_periods]
 
         periods = deduplicate_list_of_periods(periods)
 
