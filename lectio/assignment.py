@@ -22,7 +22,8 @@ class Assignment(LectioType):
 
     STATUS_LOOKUP = {
         "Afleveret": AssignmentStatuses.HANDED_IN,
-        "Venter": AssignmentStatuses.WAITING
+        "Venter": AssignmentStatuses.WAITING,
+        "Mangler": AssignmentStatuses.MISSING
     }
 
     ATTRIBUTES = ["week", "group", "title", "deadline", "student_hours",

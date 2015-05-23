@@ -46,3 +46,4 @@ class AssignmentStatuses(Enum):
     """
     HANDED_IN = 0
     WAITING = 1
+    MISSING = 2
