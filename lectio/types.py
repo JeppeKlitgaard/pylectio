@@ -3,6 +3,7 @@ Contains the base types used by pylectio.
 """
 
 from enum import Enum
+import hashlib
 
 
 class LectioType(object):
@@ -10,6 +11,22 @@ class LectioType(object):
     Abstract Base Class for Lectio Types.
     """
     ATTRIBUTES = []
+
+    def get_hash(self):
+        """
+        Returns a hash of the object.
+        """
+        hasher = hashlib.sha512()
+
+        for attribute in self.ATTRIBUTES:
+            attr = getattr(self, attribute)
+
+            if attr is not None:
+                hasher.update(str(attr).encode("utf-8"))
+            else:
+                hasher.update("NONE".encode("utf-8"))
+
+        return hasher.hexdigest()
 
     def __repr__(self):
         indent = "\t"
