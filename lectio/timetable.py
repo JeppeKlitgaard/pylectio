@@ -45,8 +45,11 @@ class Period(LectioType):
         parsed_url = urlparse(raw_tag["href"])
         parsed_qs = parse_qs(parsed_url.query)
 
-        if "id" in parsed_qs:
-            self.id = parsed_qs["id"][0]
+        print("URL: " + str(parsed_url))
+        print("QS: " + str(parsed_qs))
+
+        if "absid" in parsed_qs:
+            self.id = parsed_qs["absid"][0]
         elif "ProeveholdId" in parsed_qs:
             self.id = "p" + parsed_qs["ProeveholdId"][0]
         else:
