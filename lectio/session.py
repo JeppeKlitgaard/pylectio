@@ -117,7 +117,7 @@ class Session(object):
 
         table_attrs = {
             "id": "s_m_Content_Content_ExerciseGV",
-            "class": "ls-table-layout1 maxW textTop"
+            "class": "ls-table-layout1 maxW textTop lf-grid"
         }
 
         table = soup.find("table", attrs=table_attrs)
