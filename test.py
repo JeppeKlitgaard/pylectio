@@ -2,7 +2,7 @@ from lectio.session import Session
 
 school_id = "248"
 student_id = "9232029391"
-week = 6
+week = 33
 year = 2015
 
 s = Session(school_id)
