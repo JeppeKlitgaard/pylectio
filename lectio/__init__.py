@@ -5,7 +5,7 @@
 Module for interacting with lectio.dk.
 """
 
-__version__ = (0, 3, 2)
+__version__ = (0, 3, 3)
 
 from .session import Session  # noqa
 from .timetable import Period  # noqa
