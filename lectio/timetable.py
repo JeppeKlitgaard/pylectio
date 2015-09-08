@@ -20,7 +20,7 @@ class Period(LectioType):
     CANCELLED = "Aflyst!"
     ATTRIBUTES = ["status", "starttime", "endtime", "topic", "groups",
                   "teachers", "teachers_short", "rooms", "resources",
-                  "links", "homework", "note", "id"]
+                  "links", "homework", "note", "id", "extra"]
 
     def __init__(self, raw_tag, tz=DEFAULT_TZ):
         self.status = None
@@ -36,6 +36,7 @@ class Period(LectioType):
         self.homework = None
         self.note = None
         self.id = None
+        self.extra = None
 
         self.tz = tz
 
@@ -44,9 +45,6 @@ class Period(LectioType):
         # Id
         parsed_url = urlparse(raw_tag["href"])
         parsed_qs = parse_qs(parsed_url.query)
-
-        print("URL: " + str(parsed_url))
-        print("QS: " + str(parsed_qs))
 
         if "absid" in parsed_qs:
             self.id = parsed_qs["absid"][0]
@@ -82,6 +80,12 @@ class Period(LectioType):
         DATE_LINE_PATTERN = re.compile(p)
         date_line = self.lines.pop(0)
         result = re.match(DATE_LINE_PATTERN, date_line)
+
+        if result is None:  # Extra line is present
+            self.extra = date_line
+
+            date_line = self.lines.pop(0)
+            result = re.match(DATE_LINE_PATTERN, date_line)
 
         startday = int(result.group("startday"))
         startmonth = int(result.group("startmonth"))
