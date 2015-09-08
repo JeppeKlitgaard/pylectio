@@ -15,13 +15,14 @@ VIEW_STATEX = ("igAAAGlpZQotNzc3Mjg0NjU3aWwCawCBbAJoaWRsAmcCaWwCawFlA29mZmwCZw"
                "AAABNWYWxpZGF0ZVJlcXVlc3RNb2RlDGF1dG9jb21wbGV0ZQlpbm5lcmh0bWwJ"
                "bWF4bGVuZ3RoB0NoZWNrZWQAQ7qEXX4YWB6lvoORqK0bTe3OSHA=")
 
-EVENTVALIDATION = ("NqCgrFleahJiNLJy+ZoeITtYXPBOrIlZbkBmxzdK2iM8ZsXaYo9U+ZYX2Z"
-                   "2aVk3YQt5MN2YwIyQ6H/Dq2tXyLfV2B6rl8ACZE0GXZIFValsuI+aSxHnV"
-                   "ha9386obrX776gSnN3yFTdqUpw090gvAEnQmb5AQj6CN7+HTO5PcMS3ROu"
-                   "3qJQA+4G+HLeIGOy/ShHXl9+TCTijqBRTAseOm/c0R37BoFdZxM1QU9nGj"
-                   "YTnwt3QEDnkx99nG0wmNw3LIgmyyIpVru6DH5rVWejugtIYCfK/sMcWdE1"
-                   "VVbKmi0jEfBWEwWeqTAfD5MDntWpqlABfnXcDGJXHMzvfZ8L6iyZTQ36Oy"
-                   "BBQ+Eb5qdyN1frKh4zgcfjJmVXj2xoXIsPg21xINNmKJ/TkO6VWvxlPxqJ"
-                   "KRFSgkK9jpSPCjDAB1zmiv3Qf3z1HKHUqhPnF1zi0W")
+EVENTVALIDATION = ("zbZWcFhVBVWLCO5zNUuI2PsDDTTPi/fDOgr5LlIPP5+vaoQWV/XhZWruNb"
+                   "yoqOsT2KQ8iSaFNAdaWkYkmeQWVNO249jAesebDvHhP+otIz6Mxzl9WHk4"
+                   "99pw99GsAPWFq/YKI4kE4+QVVjG96bF90POwmkY3UUcpgvElhP9RNN5HIx"
+                   "A065DD4q9vZ5JLb62cewnzhhnkBbnzrKrX68yXt5xSYyzRRflUs+18qdcT"
+                   "njDztyNaWc5EihgQPIn+5LzmW5d9xQZlU6hQc7iEiW89zxqXCrOhGBSJnn"
+                   "YRhWGkMGnvLoJHQRZ3jl+oA2utm5iYq66AzBbqBYR82MBhXbxHu3Hhk4NV"
+                   "bLnhad5lf3cnPtXcDmMJdNBigXH8eAPFoCb5sR7inOMjs7mdJAGLL0Hk2h"
+                   "z0swGb3quXC8HWOog3ivHYXKY0yOUJrpWKbhugUtOYXyOEfkzAkZ+lOLCI"
+                   "1qxHww==")
 
 DECIMAL_SEPARATOR = ","
