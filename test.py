@@ -1,9 +1,9 @@
 from lectio.session import Session
 
-school_id = "248"
-student_id = "9232029391"
-week = 33
-year = 2015
+school_id = "163"
+student_id = "16571398735"
+week = 17
+year = 2019
 
 s = Session(school_id)
 
